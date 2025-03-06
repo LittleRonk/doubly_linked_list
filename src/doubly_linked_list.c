@@ -154,13 +154,13 @@ bool dll_push_back(DllList *list, const void *data)
  */
 static DllNode *dll_get_node_at(const DllList *list, size_t index)
 {
-    if (!list || (list->size == 0) || (index >= list->size))
+    if (!list)
         return NULL;
 
     DllNode *node = NULL;
 
     /* We go throught the list from the beginning to the end of from the end
-     * to the beginning, depending on the distance of the desing node from
+     * to the beginning, depending on the distance of the desired node from
      * the middle of the list */
     if (index <= (list->size / 2))
     {
@@ -170,8 +170,8 @@ static DllNode *dll_get_node_at(const DllList *list, size_t index)
     }
     else
     {
-        node = list->tail->prev;
-        for (int i = list->size - 1; i > index; --i)
+        node = list->tail;
+        for (int i = list->size; i > index; --i)
             node = node->prev;
     }
 
@@ -183,18 +183,13 @@ bool dll_insert_at(DllList *list, size_t index, const void *data)
     if (!list)
         return false;
 
+    if (index > list->size)
+        index = list->size;
+
     DllNode *new_node = create_node_and_copy_data(list, data);
     if (!new_node)
         return false;
 
-    // Add an element to the beginning of the list.
-    if (index == 0)
-        dll_push_front(list, data);
-
-    // Add an element to the end of the list.
-    if (index >= list->size)
-        dll_push_back(list, data);
-    
     DllNode *before = dll_get_node_at(list, index); // The node before which a new node should be insert.
     DllNode *after = before->prev;                  // The node after which a new node must be inserted.
 
@@ -306,12 +301,12 @@ void dll_reverse(DllList *list)
     }
 }
 
-void dll_for_each(DllList *list, void (*func) (void *))
+void dll_for_each(DllList *list, void (*func) (void *, void *), void *arg)
 {
 	DllNode *cur_node = list->head->next;
     while(cur_node->next != NULL)
     {
-        func(cur_node->data);
+        func(cur_node->data, arg);
         cur_node = cur_node->next;
     }
 }
@@ -345,7 +340,7 @@ DllList * dll_copy(const DllList *list)
  * @param node_1: Pointer to the first node.
  * @param node_2: Pointer to the second node.
  */
-void swape_node(DllNode *node_1, DllNode *node_2)
+void swap_node(DllNode *node_1, DllNode *node_2)
 {
     node_1->next = node_2->next;
     node_2->next->prev = node_1;
@@ -424,7 +419,7 @@ void dll_bubble_sort(DllList *list, int (*cmp) (const void *, const void *))
             if (cmp(item_1->data, item_2->data) > 0)
             {
                 is_sorted = false;
-                swape_node(item_1, item_2);
+                swap_node(item_1, item_2);
             }
             item_1 = item_2;
             item_2 = item_2->next;
@@ -444,7 +439,7 @@ void dll_bubble_sort(DllList *list, int (*cmp) (const void *, const void *))
             if (cmp(item_1->data, item_2->data) > 0)
             {
                 is_sorted = false;
-                swape_node(item_1, item_2);
+                swap_node(item_1, item_2);
             }
             item_2 = item_1;
             item_1 = item_1->prev;

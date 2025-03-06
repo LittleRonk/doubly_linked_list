@@ -4,7 +4,7 @@
 
 void * copy_item(const void *item);
 void free_item(void *item);
-void print_dll(void *data);
+void print_dll(void *data, void *arg);
 int cmp(const void *item_1, const void *item_2);
 
 int main(void)
@@ -17,6 +17,7 @@ int main(void)
     float r = 6.6;
 
     DllList *my_list = dll_create(copy_item, free_item);
+    printf("The list has been successfully created\n");
 
     dll_push_back(my_list, &x);
     dll_push_back(my_list, &y);
@@ -28,8 +29,11 @@ int main(void)
     dll_push_back(my_list, &x);
     dll_push_back(my_list, &r);
     dll_insert_at(my_list, 2, &f);
+    dll_insert_at(my_list, 0, &r);
 
-    dll_for_each(my_list, print_dll);
+    dll_for_each(my_list, print_dll, NULL);
+    putchar('\n');
+    printf("list size: %zu\n", dll_size(my_list));
     printf("\n****************\n");
 
     dll_remove_at(my_list, 1);
@@ -51,7 +55,8 @@ int main(void)
     printf("List size: %zu\n", dll_size(my_list));
 
     printf("\n****************\n");
-    dll_for_each(my_list, print_dll);
+    dll_for_each(my_list, print_dll, NULL);
+    putchar('\n');
 
     printf("\n****************\n");
     printf("List is empty: %s\n", dll_is_empty(my_list) ? "true" : "false");
@@ -60,18 +65,35 @@ int main(void)
     printf("\n****************\n");
     dll_sort(my_list, cmp);
     printf("The list is sorted:\n");
-    dll_for_each(my_list, print_dll);
+    dll_for_each(my_list, print_dll, NULL);
+    putchar('\n');
     printf("index 1: %.1f\n", *((float *) dll_get_at(my_list, 1)));
 
     printf("\n****************\n");
     dll_reverse(my_list);
-    dll_for_each(my_list, print_dll);
+    printf("The list was reversed\n");
+    dll_for_each(my_list, print_dll, NULL);
+    putchar('\n');
 
     dll_clear(my_list);
     printf("\n****************\n");
     dll_push_back(my_list, &x);
     dll_push_back(my_list, &r);
-    dll_for_each(my_list, print_dll);
+    dll_insert_at(my_list, 4, &r);
+    dll_insert_at(my_list, 0, &x);
+    dll_insert_at(my_list, 1, &y);
+    dll_insert_at(my_list, 2, &z);
+    printf("list size: %zu\n", dll_size(my_list));
+    dll_for_each(my_list, print_dll, NULL);
+    putchar('\n');
+
+    printf("\n****************\n");
+    printf("list size: %zu\n", dll_size(my_list));
+    dll_remove_at(my_list, 2);
+    printf("The element with index 2 has been removed.\n");
+    printf("list size: %zu\n", dll_size(my_list));
+    dll_for_each(my_list, print_dll, NULL);
+    putchar('\n');
 
     dll_destroy(my_list);
 
@@ -91,9 +113,9 @@ void free_item(void *item)
     free((float *) item);
 }
 
-void print_dll(void *data)
+void print_dll(void *data, void *arg)
 {
-    printf("%.1f\n", *((float *) data));
+    printf("%.1f ", *((float *) data));
 }
 
 int cmp(const void *item_1, const void *item_2)

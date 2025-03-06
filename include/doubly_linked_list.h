@@ -105,7 +105,7 @@ bool dll_push_back(DllList *list, const void *data);
  * (if the index is greater than the size of the list, the element will
  * be added to the end).
  * @param data: Pointer to the data to insert.
- * @return: 'true' on succes, 'false' on failure.
+ * @return: 'true' on success, 'false' on failure.
  */
 bool dll_insert_at(DllList *list, size_t index, const void *data);
 
@@ -192,8 +192,9 @@ void dll_bubble_sort(DllList *list, int (*cmp) (const void *, const void *));
  *
  * @param list: Pointer to the doubly linked list.
  * @param func: Function to apply to each element.
+ * @param arg: Additional user-defined data passed to the function.
  */
-void dll_for_each(DllList *list, void (*func) (void *));
+void dll_for_each(DllList *list, void (*func) (void *, void *), void *arg);
 
 /*
  * @brief: Reverses the list.
