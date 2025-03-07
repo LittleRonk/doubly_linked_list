@@ -95,7 +95,11 @@ int main() {
 - **dll_pop_back**: Removes and returns the element from the back of the list.
 - **dll_get_at**: Retrieves the element at a specified index.
 - **dll_remove_at**: Removes the element at a specified index.
+- **dll_extract_at**: Removes a node at a specified index and returns its data.
 - **dll_sort**: Sorts the list using merge sort.
 - **dll_bubble_sort**: Sort the list using bubble sort.
 - **dll_reverse**: Reverses the list.
 - **dll_for_each**: Applies a function to each element in the list.
+- **dll_is_empty**: Returns 'true' if the list is empty, otherwise 'false'.
+- **dll_size**: Returns the number of elements in the list.
+- **dll_copy**: Creates a new list and copies all the elements of the first list into it.
